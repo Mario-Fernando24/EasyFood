@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.example.easyfood.R
 import com.example.easyfood.databinding.ActivityMainBinding
@@ -12,6 +14,7 @@ import com.example.easyfood.databinding.FragmentHomeBinding
 import com.example.easyfood.pojo.ListMeal
 import com.example.easyfood.pojo.Meal
 import com.example.easyfood.retrofit.RetrofitIntance
+import com.example.easyfood.videoModel.HomeViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -20,10 +23,14 @@ import retrofit2.Response
  class HomeFragment : Fragment() {
 
      //tenemos una instancia de nuestra interfaz
-     lateinit var binding: FragmentHomeBinding
+     private lateinit var binding: FragmentHomeBinding
+     private lateinit var homeMvvm:HomeViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //inicializar mvvm
+        homeMvvm = ViewModelProviders.of(this)[HomeViewModel::class.java]
+
     }
 
     override fun onCreateView(
@@ -38,27 +45,24 @@ import retrofit2.Response
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        RetrofitIntance.api.getRandomMeal().enqueue(object : Callback<ListMeal>{
-
-            override fun onResponse(call: Call<ListMeal>, response: Response<ListMeal>) {
-                if(response.body() != null){
-                    val radomMeal: Meal = response.body()!!.meals[0]
-                    Glide.with(this@HomeFragment)
-                        .load(radomMeal.strMealThumb)
-                        .into(binding.imgRandomMeal)
-
-                    Log.d("TEST", "MEAL ID ${radomMeal.idMeal} name ${radomMeal.strMeal}")
-                }else{
-                    return ;
-                }
-            }
-
-            override fun onFailure(call: Call<ListMeal>, t: Throwable) {
-                Log.d("HomeFragment",t.message.toString())
-            }
-        })
+        //llamo function de la api de random
+        homeMvvm.getRandomMeal()
+        //observar
+        observarRandomMeal()
     }
 
-}
+     //funcion para escuchar los datos
+     private fun observarRandomMeal() {
+         homeMvvm.observeRandomMealLivedata().observe(viewLifecycleOwner, object :Observer<Meal>{
+             override fun onChanged(t: Meal?) {
+                     Glide.with(this@HomeFragment)
+                        // .strMealThumb
+                         .load(t!!.strMealThumb)
+                   .into(binding.imgRandomMeal)
+             }
+
+         })
+     }
+
+ }
 
