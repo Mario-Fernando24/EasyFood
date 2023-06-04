@@ -4,20 +4,15 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.example.easyfood.R
 import com.example.easyfood.databinding.ActivityMealBinding
-import com.example.easyfood.databinding.FragmentHomeBinding
 import com.example.easyfood.fragment.HomeFragment
 import com.example.easyfood.pojo.Meal
-import com.example.easyfood.videoModel.HomeViewModel
-import com.example.easyfood.videoModel.MealViewModel
-import java.sql.RowId
+import com.example.easyfood.viewModel.MealViewModel
 
 class MealActivity : AppCompatActivity() {
 

@@ -1,7 +1,6 @@
 package com.example.easyfood.fragment
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,20 +8,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
-import com.example.easyfood.R
 import com.example.easyfood.activities.MealActivity
-import com.example.easyfood.databinding.ActivityMainBinding
 import com.example.easyfood.databinding.FragmentHomeBinding
-import com.example.easyfood.pojo.ListMeal
 import com.example.easyfood.pojo.Meal
-import com.example.easyfood.retrofit.RetrofitIntance
-import com.example.easyfood.videoModel.HomeViewModel
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.example.easyfood.viewModel.HomeViewModel
 
 
- class HomeFragment : Fragment() {
+class HomeFragment : Fragment() {
 
      //tenemos una instancia de nuestra interfaz
      private lateinit var binding: FragmentHomeBinding

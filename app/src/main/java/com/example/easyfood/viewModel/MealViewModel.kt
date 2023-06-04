@@ -1,4 +1,4 @@
-package com.example.easyfood.videoModel
+package com.example.easyfood.viewModel
 
 import android.util.Log
 import androidx.lifecycle.LiveData
