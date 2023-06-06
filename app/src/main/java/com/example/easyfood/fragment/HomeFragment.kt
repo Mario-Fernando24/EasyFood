@@ -23,11 +23,8 @@ class HomeFragment : Fragment() {
      //tenemos una instancia de nuestra interfaz
      private lateinit var binding: FragmentHomeBinding
      private lateinit var homeMvvm:HomeViewModel
-
      private lateinit var randomMeal:Meal
-
      private lateinit var popularItemAdapter:MostPopularRecyclerAdapter
-
 
     companion object{
          const val MEAL_ID = "id"
@@ -69,6 +66,21 @@ class HomeFragment : Fragment() {
         homeMvvm.getPopularItems()
         observepopularItemMealLiveData()
 
+        //cuando presiones click en algunos de los articulos populares
+        onPopularItemClick()
+
+    }
+
+    private fun onPopularItemClick() {
+        //llamamos el adaptador
+        popularItemAdapter.onItemClick = { meals ->
+            val intent = Intent(activity, MealActivity::class.java)
+            intent.putExtra(MEAL_ID,meals.idMeal)
+            intent.putExtra(MEAL_NAME,meals.strMeal)
+            intent.putExtra(MEAL_THUMB,meals.strMealThumb)
+            startActivity(intent)
+
+        }
     }
 
 

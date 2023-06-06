@@ -10,6 +10,8 @@ import com.example.easyfood.pojo.CategoryMeals
 
 class MostPopularRecyclerAdapter (): RecyclerView.Adapter<MostPopularRecyclerAdapter.PopularMealViewHolder>() {
 
+    //click sobre los articulos populares
+    lateinit var onItemClick: ((CategoryMeals) -> Unit)
     private var mealsList: List<CategoryMeals> = ArrayList()
 
     //ArrayList<Category>()
@@ -34,6 +36,10 @@ class MostPopularRecyclerAdapter (): RecyclerView.Adapter<MostPopularRecyclerAda
              Glide.with(holder.itemView)
                  .load(mealsList[position].strMealThumb)
                  .into(holder.binding.imgPopularMealItem)
+
+         holder.itemView.setOnClickListener {
+             onItemClick.invoke(mealsList[position])
+         }
 
      }
 
