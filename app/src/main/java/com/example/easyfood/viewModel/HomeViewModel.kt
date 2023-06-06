@@ -4,8 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.easyfood.pojo.ListMeal
-import com.example.easyfood.pojo.Meal
+import com.example.easyfood.pojo.*
 import com.example.easyfood.retrofit.RetrofitIntance
 import retrofit2.Call
 import retrofit2.Callback
@@ -14,6 +13,7 @@ import retrofit2.Response
 class HomeViewModel():ViewModel() {
 
     private var randomMealLiveData = MutableLiveData<Meal>()
+    private var popularItemsLiveData = MutableLiveData<List<CategoryMeals>>()
 
     fun getRandomMeal(){
 
@@ -35,7 +35,29 @@ class HomeViewModel():ViewModel() {
         })
     }
 
+    fun getPopularItems(){
+
+        RetrofitIntance.api.getfilterItemPopular("Canadian").enqueue(object : Callback<CategoryList>{
+            override fun onResponse(call: Call<CategoryList>, response: Response<CategoryList>) {
+
+                if(response.body() != null){
+                    popularItemsLiveData.value =  response.body()!!.meals
+                }else{
+                    return ;
+                }
+            }
+
+            override fun onFailure(call: Call<CategoryList>, t: Throwable) {
+                Log.d("PopularItems",t.message.toString())
+            }
+        })
+    }
+
     fun observeRandomMealLivedata():LiveData<Meal>{
         return randomMealLiveData
+    }
+
+    fun observepopularItemMealLivedata():MutableLiveData<List<CategoryMeals>>{
+        return popularItemsLiveData
     }
 }
