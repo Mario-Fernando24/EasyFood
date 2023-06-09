@@ -18,4 +18,8 @@ interface MealApi {
     @GET("filter.php?")
     fun getfilterItemPopular(@Query("a") categoriaName:String) :Call<CategoryList>
 
+    @GET("categories.php")
+    fun getAllCategory()
+
 }
+//www.themealdb.com/api/json/v1/1/categories.php
