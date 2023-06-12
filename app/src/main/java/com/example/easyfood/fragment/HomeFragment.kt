@@ -8,11 +8,15 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.easyfood.activities.MealActivity
+import com.example.easyfood.adapters.CategoryAdapter
 import com.example.easyfood.adapters.MostPopularRecyclerAdapter
 import com.example.easyfood.databinding.FragmentHomeBinding
+import com.example.easyfood.pojo.Category
+import com.example.easyfood.pojo.CategoryList
 import com.example.easyfood.pojo.CategoryMeals
 import com.example.easyfood.pojo.Meal
 import com.example.easyfood.viewModel.HomeViewModel
@@ -25,6 +29,7 @@ class HomeFragment : Fragment() {
      private lateinit var homeMvvm:HomeViewModel
      private lateinit var randomMeal:Meal
      private lateinit var popularItemAdapter:MostPopularRecyclerAdapter
+    private lateinit var categoryItemAdapter: CategoryAdapter
 
     companion object{
          const val MEAL_ID = "id"
@@ -38,6 +43,7 @@ class HomeFragment : Fragment() {
         homeMvvm = ViewModelProviders.of(this)[HomeViewModel::class.java]
         //inicializo el adaptador
         popularItemAdapter = MostPopularRecyclerAdapter()
+        categoryItemAdapter = CategoryAdapter()
 
 
     }
@@ -56,11 +62,13 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         preparePopularItemsReciclerView()
+        prepareCtegoryItemsReciclerView()
         //llamo function de la api de random
         homeMvvm.getRandomMeal()
         //observar
         observarRandomMeal()
         onRandomMealClick()
+
 
 
         homeMvvm.getPopularItems()
@@ -69,7 +77,11 @@ class HomeFragment : Fragment() {
         //cuando presiones click en algunos de los articulos populares
         onPopularItemClick()
 
+        homeMvvm.getAllCategory()
+        observeCategoriaLiveData()
+
     }
+
 
     private fun onPopularItemClick() {
         //llamamos el adaptador
@@ -105,6 +117,15 @@ class HomeFragment : Fragment() {
         }
     }
 
+    private fun prepareCtegoryItemsReciclerView() {
+
+        binding.recViewCategories.apply {
+            //CONECTAR EL ADAPTADOR
+            adapter = categoryItemAdapter
+            layoutManager = GridLayoutManager(context, 3, GridLayoutManager.VERTICAL, false)
+        }
+    }
+
     private fun observepopularItemMealLiveData() {
 
         homeMvvm.observepopularItemMealLivedata().observe(viewLifecycleOwner) { mealList ->
@@ -112,9 +133,19 @@ class HomeFragment : Fragment() {
             popularItemAdapter.setMeals(mealsList = mealList as ArrayList<CategoryMeals>)
 
         }
+    }
+
+    private fun observeCategoriaLiveData() {
+        homeMvvm.observeCategoriesItemLiveData().observe(viewLifecycleOwner, Observer { catego ->
+            Log.d("",""+catego)
+            categoryItemAdapter.setCategory(categoriesList = catego as ArrayList<Category>)
+
+        })
+
 
 
     }
+
 
 
     //funcion para escuchar los datos
@@ -131,6 +162,9 @@ class HomeFragment : Fragment() {
              }
          })
      }
+
+
+
 
 
 

@@ -14,6 +14,7 @@ class HomeViewModel():ViewModel() {
 
     private var randomMealLiveData = MutableLiveData<Meal>()
     private var popularItemsLiveData = MutableLiveData<List<CategoryMeals>>()
+    private var categoirestemiveata = MutableLiveData<List<Category>>()
 
     fun getRandomMeal(){
 
@@ -58,15 +59,17 @@ class HomeViewModel():ViewModel() {
     fun getAllCategory(){
 
         RetrofitIntance.api.getAllCategory().enqueue(object : Callback<MealByCategoryList>{
-            override fun onResponse(
-                call: Call<MealByCategoryList>,
-                response: Response<MealByCategoryList>
-            ) {
-                TODO("Not yet implemented")
+            override fun onResponse( call: Call<MealByCategoryList>, response: Response<MealByCategoryList>) {
+                if(response.body() != null){
+
+                    categoirestemiveata.value =  response.body()!!.categories
+                }else{
+                    return ;
+                }
             }
 
             override fun onFailure(call: Call<MealByCategoryList>, t: Throwable) {
-                TODO("Not yet implemented")
+                Log.d("PopularItems",t.message.toString())
             }
 
         })
@@ -78,5 +81,9 @@ class HomeViewModel():ViewModel() {
 
     fun observepopularItemMealLivedata():MutableLiveData<List<CategoryMeals>>{
         return popularItemsLiveData
+    }
+
+    fun  observeCategoriesItemLiveData(): MutableLiveData<List<Category>>{
+        return  categoirestemiveata
     }
 }
