@@ -53,6 +53,25 @@ class HomeViewModel():ViewModel() {
         })
     }
 
+
+    //retornar todas las categorias
+    fun getAllCategory(){
+
+        RetrofitIntance.api.getAllCategory().enqueue(object : Callback<MealByCategoryList>{
+            override fun onResponse(
+                call: Call<MealByCategoryList>,
+                response: Response<MealByCategoryList>
+            ) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onFailure(call: Call<MealByCategoryList>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+
+        })
+    }
+
     fun observeRandomMealLivedata():LiveData<Meal>{
         return randomMealLiveData
     }
